@@ -10,6 +10,10 @@ import Foundation
 class MovieViewModel {
     private let movieModel: MovieModel
     
+    var id: Int {
+        return movieModel.id ?? 0
+    }
+    
     var title: String {
         return movieModel.title ?? ""
     }
@@ -36,6 +40,10 @@ class MovieViewModel {
     
     var releaseDate: String {
         return movieModel.releaseDate ?? ""
+    }
+    
+    var year: String {
+        return String(movieModel.releaseDate?.prefix(4) ?? "")
     }
     
     init(movieModel: MovieModel){

@@ -68,6 +68,13 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    func onSelect(movieViewModel: MovieViewModel) {
+        let vc = storyboard?.instantiateViewController(identifier: "MovieDetailViewController") as! MovieDetailViewController
+        vc.modalPresentationStyle = .fullScreen
+        vc.initData(movieViewModel: movieViewModel)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == bannerCollectionView {
             return self.popularMovieList.count
@@ -119,7 +126,14 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        if collectionView == bannerCollectionView {
+            collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+            onSelect(movieViewModel: self.popularMovieList[indexPath.row])
+        } else if collectionView == popularHomeCollectionView  {
+            onSelect(movieViewModel: self.popularMovieList[indexPath.row])
+        } else {
+            onSelect(movieViewModel: self.upcomingMovieList[indexPath.row])
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

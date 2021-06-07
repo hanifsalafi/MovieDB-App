@@ -21,6 +21,7 @@ protocol HttpRouter {
     func body() throws -> Data?
     
     func request(usingHttpService service: HttpService) throws -> DataRequest
+    func requestById(usingHttpService service: HttpService, id: Int) throws -> DataRequest
 }
 
 
@@ -29,8 +30,13 @@ extension HttpRouter {
     var parameters: Parameters? { return nil }
     func body() throws -> Data? { return nil }
     
-    func asUrlRequest() throws -> URLRequest {
-        let urlString = baseUrlString + (path ?? "")
+    func asUrlRequest(_ id: Int?) throws -> URLRequest {
+        var urlString = baseUrlString
+        if id != nil {
+            urlString += "movie/" + "\(id!)" + path!
+        } else {
+            urlString += path ?? ""
+        }
         let url = try urlString.asURL()
         
         var request = try URLRequest(url: url, method: method, headers: headers)
@@ -40,6 +46,10 @@ extension HttpRouter {
     }
     
     func request(usingHttpService service: HttpService) throws -> DataRequest {
-        return try service.request(url: asUrlRequest())
+        return try service.request(url: asUrlRequest(nil))
+    }
+    
+    func requestById(usingHttpService service: HttpService, id: Int) throws -> DataRequest {
+        return try service.request(url: asUrlRequest(id))
     }
 }

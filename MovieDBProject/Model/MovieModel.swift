@@ -43,3 +43,4 @@ class MovieModel: Mappable {
 }
 
 typealias MoviesResponse = [MovieModel]
+typealias MovieResponse = MovieModel

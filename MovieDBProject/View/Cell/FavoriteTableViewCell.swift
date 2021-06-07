@@ -26,5 +26,24 @@ class FavoriteTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    func configure(title: String?, year: String?, desc: String?, imageURL: String?){
+        
+        self.titleLabel.text = title ?? ""
+        self.yearLabel.text = String(year?.prefix(4) ?? "")
+        self.descLabel.text = desc ?? ""
+        
+        // Load Image
+        if let imageUrl = imageURL {
+            let url = CommonCons.pathURLImage+imageUrl
+            ImageUtils.loadImage(urlString: url) { (urlString, image) in
+                
+                // Caching image data
+                ImageUtils.cacheImage(urlString: urlString, img: image!)
+                
+                self.movieImageView.image = image
+            }
+        }
+    }
 
 }
